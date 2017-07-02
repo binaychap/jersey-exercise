@@ -10,6 +10,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import com.binay.model.Activity;
 import com.binay.model.User;
@@ -20,17 +22,18 @@ import com.binay.repository.ActivityRepositoryStub;
 public class ActivityResource {
 
 	private ActivityRepository activityRepository = new ActivityRepositoryStub();
-	
+
 	@POST
 	@Path("activity")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
-	public Activity createActivity(Activity activity){
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Activity createActivity(Activity activity) {
 		System.out.println(activity.getDescription());
 		System.out.println(activity.getDuration());
 		activityRepository.create(activity);
 		return activity;
 	}
+
 	@POST
 	@Path("activity")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -52,9 +55,15 @@ public class ActivityResource {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("{activityId}")
-	public Activity getAllActivity(@PathParam("activityId") String activityId) {
-		System.out.println("Getting activity ID:"+ activityId);
-		return activityRepository.findAllActivity(activityId);
+	public Response getAllActivity(@PathParam("activityId") String activityId) {
+		if (activityId == null || activityId.length() < 4) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		Activity activity = activityRepository.findAllActivity(activityId);
+		if (activity == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		return Response.ok().entity(activity).build();
 	}
 
 	@GET
