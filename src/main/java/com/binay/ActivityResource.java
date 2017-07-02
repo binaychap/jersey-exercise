@@ -53,6 +53,7 @@ public class ActivityResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("{activityId}")
 	public Activity getAllActivity(@PathParam("activityId") String activityId) {
+		System.out.println("Getting activity ID:"+ activityId);
 		return activityRepository.findAllActivity(activityId);
 	}
 
