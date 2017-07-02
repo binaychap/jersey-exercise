@@ -8,11 +8,12 @@ import com.binay.model.User;
 
 public class ActivityRepositoryStub implements ActivityRepository {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.binay.repository.ActivityRepository#findAllActivities()
-	 */
+	@Override
+	public void create(Activity activity) {
+		// TODO Auto-generated method stub
+
+	}
+
 	@Override
 	public List<Activity> findAllActivities() {
 		List<Activity> activities = new ArrayList<Activity>();
